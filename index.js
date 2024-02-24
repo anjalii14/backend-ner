@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 
+
+const sessionRoutes = require('./routes/session');
+const authRoutes = require('./routes/user');
+
 dotenv.config(); // Load environment variables from .env file
 
 const app = express();
@@ -14,9 +18,6 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
 // Middleware
 app.use(bodyParser.json());
 
-// Routes
-// const filesRoutes = require('./routes/filesRoutes');
-// app.use('/files', filesRoutes);
 
 // Route for the first page
 app.get('/', (req, res) => {
@@ -28,6 +29,8 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something went wrong!');
 });
+app.use('/session', sessionRoutes);
+app.use('/auth', authRoutes);
 
 // Start the server
 app.listen(PORT, () => {
